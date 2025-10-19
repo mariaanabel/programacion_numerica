@@ -305,73 +305,157 @@
                 <h2>Implementación en Python</h2>
                 <div class="code-box">
 <pre>import tkinter as tk
-from tkinter import ttk, messagebox
+import tkinter as tk
+from tkinter import messagebox
 
-def analizar():
-    expresion = entrada.get()
+def analizar_funcion():
+    expresion = entrada.get().replace(" ", "")
     
-    if not expresion.strip():
-        messagebox.showwarning("Error", "Por favor ingresa una función matemática.")
+    if not expresion:
+        messagebox.showwarning("Error", "Ingresa una función")
         return
     
-    variables = set()
+    # Encontrar variables
+    variables = []
+    for char in expresion:
+        if char.isalpha() and char not in variables:
+            variables.append(char)
+    
+    if len(variables) > 2:
+        messagebox.showerror("Error", "Máximo 2 variables permitidas")
+        return
+    
+    # Contar operaciones
     operaciones = 0
     
-    for i, c in enumerate(expresion):
-        if c.isalpha():
-            variables.add(c)
-        
-        elif c in "+-*/^":
+    # Operaciones explícitas
+    for char in expresion:
+        if char in "+-*/^":
             operaciones += 1
-        
-        # Detectar multiplicación implícita
-        if i < len(expresion) - 1:
-            siguiente = expresion[i+1]
-            if c.isdigit() and siguiente.isalpha():
-                operaciones += 1
-            elif c.isalpha() and siguiente.isalpha():
-                operaciones += 1
     
-    resultado.set(
-        f"Variables encontradas: {', '.join(sorted(variables))}\n"
-        f"Número de variables: {len(variables)}\n"
-        f"Número de operaciones: {operaciones}"
-    )
+    # Multiplicaciones implícitas
+    for i in range(len(expresion) - 1):
+        actual = expresion[i]
+        siguiente = expresion[i + 1]
+        
+        # número seguido de letra: 5x
+        if actual.isdigit() and siguiente.isalpha():
+            operaciones += 1
+        # letra seguida de letra: xy
+        elif actual.isalpha() and siguiente.isalpha():
+            operaciones += 1
+    
+    # Mostrar resultados
+    resultado = f"""━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Expresión: {expresion}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Variables: {', '.join(sorted(variables)) if variables else 'Ninguna'}
+✓ Cantidad de variables: {len(variables)}
+✓ Total de operaciones: {operaciones}
+"""
+    
+    texto_resultado.config(state=tk.NORMAL)
+    texto_resultado.delete(1.0, tk.END)
+    texto_resultado.insert(1.0, resultado)
+    texto_resultado.config(state=tk.DISABLED)
 
 # Crear ventana
 ventana = tk.Tk()
-ventana.title("Analizador de Funciones Matemáticas")
-ventana.geometry("400x300")
-ventana.configure(bg="#f4f6f7")
+ventana.title("🔢 Analizador de Funciones - Maria Anabel")
+ventana.geometry("500x380")
+ventana.configure(bg="#ffe8ec")
+ventana.resizable(False, False)
 
-# Estilos
-estilo = ttk.Style()
-estilo.configure("TButton", font=("Arial", 12), padding=6)
-estilo.configure("TLabel", font=("Arial", 12))
+# Título
+tk.Label(
+    ventana,
+    text="🌸 Analizador de Funciones Matemáticas 🌸",
+    font=("Arial", 16, "bold"),
+    bg="#ffe8ec",
+    fg="#ff6b81"
+).pack(pady=15)
 
-# Etiqueta de título
-titulo = tk.Label(
-    ventana, text="Analizador de Funciones",
-    font=("Arial", 16, "bold"), bg="#f4f6f7", fg="#2c3e50"
+tk.Label(
+    ventana,
+    text="Ingresa una función matemática (máximo 2 variables)",
+    font=("Arial", 9),
+    bg="#ffe8ec",
+    fg="#555"
+).pack(pady=5)
+
+# Entrada
+frame_entrada = tk.Frame(ventana, bg="#ffe8ec")
+frame_entrada.pack(pady=15)
+
+tk.Label(
+    frame_entrada,
+    text="Función:",
+    font=("Arial", 12, "bold"),
+    bg="#ffe8ec",
+    fg="#ff6b81"
+).pack(side=tk.LEFT, padx=5)
+
+entrada = tk.Entry(
+    frame_entrada,
+    font=("Consolas", 14),
+    width=20,
+    bg="white",
+    relief=tk.SOLID,
+    bd=2
 )
-titulo.pack(pady=10)
-
-# Entrada de texto
-entrada = ttk.Entry(ventana, font=("Consolas", 14))
-entrada.pack(pady=10, ipadx=20, ipady=5)
+entrada.pack(side=tk.LEFT, padx=5)
+entrada.bind('<Return>', lambda e: analizar_funcion())
 
 # Botón
-btn = ttk.Button(ventana, text="Analizar", command=analizar)
-btn.pack(pady=10)
+tk.Button(
+    ventana,
+    text="✨ Analizar Función ✨",
+    font=("Arial", 12, "bold"),
+    bg="#ff9a9e",
+    fg="white",
+    activebackground="#ff6b81",
+    cursor="hand2",
+    padx=20,
+    pady=8,
+    command=analizar_funcion
+).pack(pady=15)
 
-# Resultado
-resultado = tk.StringVar()
-label_resultado = tk.Label(
-    ventana, textvariable=resultado,
-    font=("Consolas", 12), bg="#ecf0f1", fg="#2c3e50",
-    relief="groove", justify="left", anchor="w"
+# Resultados
+frame_resultado = tk.Frame(ventana, bg="white", relief=tk.GROOVE, bd=3)
+frame_resultado.pack(pady=5, padx=30, fill=tk.BOTH, expand=True)
+
+tk.Label(
+    frame_resultado,
+    text="📊 Resultados del Análisis",
+    font=("Arial", 11, "bold"),
+    bg="white",
+    fg="#ff6b81"
+).pack(pady=8)
+
+texto_resultado = tk.Text(
+    frame_resultado,
+    font=("Consolas", 10),
+    height=7,
+    width=45,
+    bg="#f8f9fa",
+    relief=tk.FLAT,
+    padx=10,
+    pady=5
 )
-label_resultado.pack(fill="both", expand=True, padx=20, pady=10)
+texto_resultado.pack(pady=5, padx=10)
+texto_resultado.config(state=tk.DISABLED)
+
+# Firma
+tk.Label(
+    ventana,
+    text="💖 Maria Anabel Quilca Mestas - 236173 💖",
+    font=("Arial", 8),
+    bg="#ffe8ec",
+    fg="#999"
+).pack(side=tk.BOTTOM, pady=5)
+
+ventana.mainloop()
 
 # Iniciar
 ventana.mainloop()</pre>
@@ -487,3 +571,4 @@ ventana.mainloop()</pre>
 </body>
 
 </html>
+
