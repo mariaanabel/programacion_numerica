@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo 1 - Reconocimiento de Funciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 25px 70px rgba(255, 154, 158, 0.4);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            color: #ff6b81;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .back-button:hover {
+            background: #ff6b81;
+            color: white;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .trabajo-info {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+            padding: 30px 50px;
+            border-bottom: 3px solid #ff9a9e;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-item strong {
+            color: #ff6b81;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .info-item span {
+            color: #555;
+            font-size: 1.05em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #ff6b81;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffd6d9;
+        }
+
+        .section h2::before {
+            content: '✨ ';
+        }
+
+        .section h3 {
+            color: #ff6b81;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .section ul, .section ol {
+            margin-left: 30px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+        }
+
+        .description-box {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+            border-left: 4px solid #ff6b81;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .entrada-box, .salida-box, .restricciones-box {
+            background: #f8f9fa;
+            border: 2px solid #ffd6d9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+        }
+
+        .entrada-box h4, .salida-box h4, .restricciones-box h4 {
+            color: #ff6b81;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .code-box .comment {
+            color: #75715e;
+        }
+
+        .code-box .keyword {
+            color: #f92672;
+        }
+
+        .code-box .string {
+            color: #e6db74;
+        }
+
+        .code-box .function {
+            color: #66d9ef;
+        }
+
+        .ejemplo-visual {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+            border-radius: 15px;
+        }
+
+        .ejemplo-visual img {
+            max-width: 80%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 154, 158, 0.3);
+            margin-top: 15px;
+        }
+
+        .image-caption {
+            color: #666;
+            font-style: italic;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff6b81 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 154, 158, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">← Volver</a>
+            <h1>💖 Trabajo 1 - Reconocimiento de Funciones</h1>
+        </header>
+
+        <div class="trabajo-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <strong>📅 FECHA:</strong>
+                    <span>Enero 2025</span>
+                </div>
+                <div class="info-item">
+                    <strong>👩‍🎓 ALUMNA:</strong>
+                    <span>Maria Anabel Quilca Mestas</span>
+                </div>
+                <div class="info-item">
+                    <strong>🔢 CÓDIGO:</strong>
+                    <span>236173</span>
+                </div>
+                <div class="info-item">
+                    <strong>📚 UNIDAD:</strong>
+                    <span>Unidad 1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- DESCRIPCIÓN -->
+            <div class="section">
+                <h2>Descripción del Problema</h2>
+                <div class="description-box">
+                    <p>
+                        Se desea desarrollar un programa que, dada una función matemática ingresada por el usuario
+                        con un máximo de dos variables, identifique cuáles son esas variables y cuente el número de
+                        operaciones presentes, incluyendo sumas, restas, multiplicaciones, divisiones, potencias y 
+                        multiplicaciones implícitas (como 5x o xy). El programa debe procesar la función y entregar 
+                        como resultado las variables identificadas, el número de variables distintas y el total de 
+                        operaciones encontradas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ENTRADA -->
+            <div class="section">
+                <h2>Especificaciones</h2>
+                
+                <div class="entrada-box">
+                    <h4>📥 Entrada</h4>
+                    <p>Una cadena de texto que representa una función matemática.</p>
+                    <p><strong>Ejemplo:</strong> <code>5x + 3y</code></p>
+                </div>
+
+                <div class="salida-box">
+                    <h4>📤 Salida</h4>
+                    <ul>
+                        <li>Variables: x, y</li>
+                        <li>Número de variables: 2</li>
+                        <li>Número de operaciones: 3</li>
+                    </ul>
+                </div>
+
+                <div class="restricciones-box">
+                    <h4>⚙️ Restricciones</h4>
+                    <ul>
+                        <li>Máximo 2 variables</li>
+                        <li>Operaciones consideradas: <code>+ - * / ^</code></li>
+                        <li>Multiplicación implícita (número seguido de variable o letra seguida de letra)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CÓDIGO -->
+            <div class="section">
+                <h2>Implementación en Python</h2>
+                <div class="code-box">
+<pre>import tkinter as tk
+from tkinter import ttk, messagebox
+
+def analizar():
+    expresion = entrada.get()
+    
+    if not expresion.strip():
+        messagebox.showwarning("Error", "Por favor ingresa una función matemática.")
+        return
+    
+    variables = set()
+    operaciones = 0
+    
+    for i, c in enumerate(expresion):
+        if c.isalpha():
+            variables.add(c)
+        
+        elif c in "+-*/^":
+            operaciones += 1
+        
+        # Detectar multiplicación implícita
+        if i < len(expresion) - 1:
+            siguiente = expresion[i+1]
+            if c.isdigit() and siguiente.isalpha():
+                operaciones += 1
+            elif c.isalpha() and siguiente.isalpha():
+                operaciones += 1
+    
+    resultado.set(
+        f"Variables encontradas: {', '.join(sorted(variables))}\n"
+        f"Número de variables: {len(variables)}\n"
+        f"Número de operaciones: {operaciones}"
+    )
+
+# Crear ventana
+ventana = tk.Tk()
+ventana.title("Analizador de Funciones Matemáticas")
+ventana.geometry("400x300")
+ventana.configure(bg="#f4f6f7")
+
+# Estilos
+estilo = ttk.Style()
+estilo.configure("TButton", font=("Arial", 12), padding=6)
+estilo.configure("TLabel", font=("Arial", 12))
+
+# Etiqueta de título
+titulo = tk.Label(
+    ventana, text="Analizador de Funciones",
+    font=("Arial", 16, "bold"), bg="#f4f6f7", fg="#2c3e50"
+)
+titulo.pack(pady=10)
+
+# Entrada de texto
+entrada = ttk.Entry(ventana, font=("Consolas", 14))
+entrada.pack(pady=10, ipadx=20, ipady=5)
+
+# Botón
+btn = ttk.Button(ventana, text="Analizar", command=analizar)
+btn.pack(pady=10)
+
+# Resultado
+resultado = tk.StringVar()
+label_resultado = tk.Label(
+    ventana, textvariable=resultado,
+    font=("Consolas", 12), bg="#ecf0f1", fg="#2c3e50",
+    relief="groove", justify="left", anchor="w"
+)
+label_resultado.pack(fill="both", expand=True, padx=20, pady=10)
+
+# Iniciar
+ventana.mainloop()</pre>
+                </div>
+            </div>
+
+            <!-- EJECUCIÓN -->
+            <div class="section">
+                <h2>Ejemplo de Ejecución</h2>
+                <div class="ejemplo-visual">
+                    <p style="color: #ff6b81; font-weight: 600; font-size: 1.1em;">
+                        Interfaz gráfica del analizador de funciones
+                    </p>
+                    <!-- Aquí puedes agregar una captura de pantalla -->
+                    <div style="background: #f8f9fa; padding: 30px; margin: 20px 0; border-radius: 10px; border: 2px solid #ffd6d9;">
+                        <p style="font-weight: 600; margin-bottom: 15px;">Entrada: 5x + 3y</p>
+                        <div style="background: white; padding: 15px; border-radius: 8px; text-align: left;">
+                            <p>Variables encontradas: x, y</p>
+                            <p>Número de variables: 2</p>
+                            <p>Número de operaciones: 3</p>
+                        </div>
+                    </div>
+                    <p class="image-caption">
+                        El programa identifica correctamente las variables x, y y cuenta 3 operaciones: 
+                        multiplicación implícita (5x), suma (+) y multiplicación implícita (3y)
+                    </p>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <img src="archivos/img.png" alt="Ventana de la aplicación analizador de funciones mostrando campo de entrada con 5x + 3y y resultados: Variables encontradas: x, y; Número de variables: 2; Número de operaciones: 3. Interfaz didáctica en ventana de escritorio con colores rosados y blancos" style="display:block; margin:0 auto; max-width:80%; border-radius:15px; box-shadow:0 10px 30px rgba(255,154,158,0.3); margin-top:15px;">
+            </div></div>
+            <!-- CONCLUSIONES -->
+            <div class="section">
+                <h2>Conclusiones</h2>
+                <ol>
+                    <li>
+                        El programa es capaz de identificar variables alfabéticas en expresiones matemáticas
+                        y contar operaciones tanto explícitas como implícitas.
+                    </li>
+                    <li>
+                        La implementación usando Tkinter permite una interfaz gráfica intuitiva y fácil de usar.
+                    </li>
+                    <li>
+                        El algoritmo detecta correctamente multiplicaciones implícitas, lo cual es fundamental
+                        para el análisis completo de expresiones matemáticas.
+                    </li>
+                    <li>
+                        Esta herramienta puede ser útil como base para un parser más complejo de expresiones
+                        matemáticas en programación numérica.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- ARCHIVOS ADJUNTOS -->
+            <div class="section" style="text-align: center;">
+                <a href="archivos/trabajo1.rar" class="download-btn" download="trabajo1_codigo.py">📥 Descargar Código Python</a>
+                <a href="archivos/trabajo1.pdf" class="download-btn" download="trabajo1.pdf">📄 Descargar PDF (LaTeX)</a>
+                <a href="https://github.com/mariaanabel/programacion-numerica" class="download-btn" target="_blank">🔗 Ver Repositorio GitHub</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>💖 Maria Anabel Quilca Mestas - Código: 236173 - Programación Numérica 💖</p>
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease-out';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Forzar descarga de archivos Python y otros
+        document.querySelectorAll('.download-btn[download]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const url = this.getAttribute('href');
+                const filename = this.getAttribute('download');
+                
+                // Si es un archivo .py, forzar descarga
+                if (url.endsWith('.py')) {
+                    e.preventDefault();
+                    
+                    fetch(url)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = window.URL.createObjectURL(blob);
+                            downloadLink.download = filename;
+                            document.body.appendChild(downloadLink);
+                            downloadLink.click();
+                            document.body.removeChild(downloadLink);
+                            window.URL.revokeObjectURL(downloadLink.href);
+                        })
+                        .catch(err => {
+                            console.error('Error al descargar:', err);
+                            // Si falla, intentar abrir en nueva pestaña
+                            window.open(url, '_blank');
+                        });
+                }
+            });
+        });
+
+        console.log('💖 Trabajo 1 - Reconocimiento de Funciones ✨');
+    </script>
+</body>
+</html>
